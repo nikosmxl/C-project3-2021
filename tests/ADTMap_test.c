@@ -70,9 +70,10 @@ void test_insert(void) {
 
 	// Ανακατεύουμε το key_array ώστε να υπάρχει ομοιόμορφη εισαγωγή τιμών
 	shuffle(key_array, N);
-
+	
 	// Δοκιμάζουμε την insert εισάγοντας κάθε φορά νέους κόμβους
 	for (int i = 0; i < N; i++) {
+		
 		value_array[i] = create_int(i);
 
 		// Εισαγωγή, δοκιμή και έλεγχος ότι ενημερώθηκε το size
@@ -85,9 +86,9 @@ void test_insert(void) {
 	// Και ελέγχουμε αν και το key και το value έχουν ενημερωθεί
 	int* new_key = create_int(*key_array[0]);
 	int* new_value = create_int(99);
-
+	
 	insert_and_test(map, new_key, new_value);
-
+	
 	map_destroy(map);
 
 	// Δοκιμάζουμε ότι insert/replace δουλεύει σωστά και χωρίς αυτόματο free
@@ -196,14 +197,14 @@ void test_iterate() {
 	bool seen[N];
 	for (int i = 0; i < N; i++)
 		seen[i] = false;
-
+	
 	for (MapNode node = map_first(map); node != MAP_EOF; node = map_next(map, node)) {
 		int* key = map_node_key(map, node);
 		int* value = map_node_value(map, node);
-
+		
 		TEST_ASSERT(*key >= 0 && *key < N && !seen[*key]);
 		TEST_ASSERT(*value == 2 * *key);
-
+		
 		seen[*key] = true;
 	}
 

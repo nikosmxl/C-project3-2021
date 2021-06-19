@@ -191,7 +191,7 @@ void test_city_rank(void) {
 	// insert students
 	for(int i = 0; i < student_no; i++)
 		ms_insert_student(&students[i]);	
-
+	
 	// Στην περίπτωση ισότητας, η υλοποίηση μπορεί να επιστρέφει τις πόλεις με οποιαδήποτε σειρά.
 	TEST_ASSERT(
 		(strcmp(ms_city_rank(1), "Stark") == 0 && strcmp(ms_city_rank(2), "Lannister") == 0) ||
