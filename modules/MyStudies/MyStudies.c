@@ -137,8 +137,8 @@ void ms_init(){
     studies->students = set_create(compare_students, NULL);
     studies->count = 0;
     studies->years = set_create(compare_years, free);
-    studies->cities = set_create(compare_cities, NULL);
-    studies->cities2 = set_create(compare_cities2, NULL);
+    studies->cities = set_create(compare_cities, free);
+    studies->cities2 = set_create(compare_cities2, free);
     studies->gpa_students = map_create(compare_ints, free, NULL);
 }
 
@@ -149,11 +149,17 @@ void ms_destroy(){
 
     data = 0;
 
+    for (MapNode mn =  map_first(studies->gpa_students) ; mn != MAP_EOF ; mn = map_next(studies->gpa_students, mn)){
+        Set set = map_node_value(studies->gpa_students, mn);
+        set_destroy(set);
+    }
+
     map_destroy(studies->gpa_students);
     set_destroy(studies->cities);
     set_destroy(studies->cities2);
     set_destroy(studies->years);
     set_destroy(studies->students);
+    free(studies);
 }
 
 bool ms_insert_student(Student student){
