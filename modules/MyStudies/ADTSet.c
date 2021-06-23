@@ -178,6 +178,7 @@ static SetNode node_remove_min(SetNode node, SetNode* min_node) {
 		// Εχουμε αριστερό υποδέντρο, οπότε η μικρότερη τιμή είναι εκεί. Συνεχίζουμε αναδρομικά
 		// και ενημερώνουμε το node->left με τη νέα ρίζα του υποδέντρου.
 		node->left = node_remove_min(node->left, min_node);
+		node->left_child_num--;
 		return node;			// η ρίζα δεν μεταβάλλεται
 	}
 }
@@ -218,7 +219,9 @@ static SetNode node_remove(SetNode node, CompareFunc compare, Pointer value, boo
 
 			// Σύνδεση του min_right στη θέση του node
 			min_right->left = node->left;
+			min_right->left_child_num = node->left_child_num;
 			min_right->right = node->right;
+			min_right->right_child_num = node->right_child_num - 1;
 
 			free(node);
 			return min_right;
@@ -356,10 +359,18 @@ Pointer set_get_at(Set set, int pos){
 
 	int compared;
 
-	do{
+	do{ 
 		curr += curr_root->left_child_num;
-
-		compared = set->compare(&curr, &pos);
+		if (curr < pos){
+			compared = -1;
+		}
+		else if (curr > pos){
+			compared = 1;
+		}
+		else{
+			compared = 0;
+		}
+		
 		if (compared == 0){
 			return curr_root->value;
 		}
@@ -390,8 +401,17 @@ void set_set_at(Set set, int pos, Pointer value){
 
 	do{
 		curr += curr_root->left_child_num;
-
-		compared = set->compare(&curr, &pos);
+		
+		if (curr < pos){
+			compared = -1;
+		}
+		else if (curr > pos){
+			compared = 1;
+		}
+		else{
+			compared = 0;
+		}
+		
 		if (compared == 0){
 
 			if (reinsert == true){
