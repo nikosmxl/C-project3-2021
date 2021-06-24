@@ -112,9 +112,14 @@ static void rehash(Map map) {
 		}
 	}
 
-	for (int i = old_capacity - 1 ; i >= 0 ; i--){
-		free(old_array[i]);
+	for (int i = 0 ; i < old_capacity ; i++){
+		DestroyFunc oldkey = map_set_destroy_key(map, NULL);
+		DestroyFunc oldvalue = map_set_destroy_value(map, NULL);
+		set_destroy(old_array[i]);
+		map_set_destroy_key(map, oldkey);
+		map_set_destroy_value(map, oldvalue);
 	}
+
 	//Αποδεσμεύουμε τον παλιό πίνακα ώστε να μήν έχουμε leaks
 	
 	free(old_array);
